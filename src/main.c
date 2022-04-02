@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <ssecs.h>
 #include "animations.h"
+#include "level.h"
 
 #ifdef __EMSCRIPTEN__
     #include <emscripten/emscripten.h>
@@ -16,6 +17,7 @@ const int screenWidth = 800;
 const int screenHeight = 450;
 
 EntityData entityData;
+LevelData levelData= (LevelData){};
 void UpdateDrawFrame(void);
 
 int main(void)
@@ -28,10 +30,11 @@ int main(void)
     for (int i = 0; i < 1; ++i)
     {
         AddComponent(&entityData, i, 0, ((Vector2){screenWidth/2, screenHeight/2}), Vector2);
-        AddComponent(&entityData, i, 1, ((AnimatedTexture){LoadTexture("assets/player/idle.png"), ((Vector2){600,600}), 0, 24}), AnimatedTexture);
+        AddComponent(&entityData, i, 1, ((AnimatedTexture){LoadTexture("assets/player/idle.png"), ((Vector2){600,600}), 0, 12}), AnimatedTexture);
     }
+    levelData = LoadLevelData("assets/leveldata", (char* []){"assets/bedroomtiles.png", "assets/kitchentiles.png", "assets/helltiles.png"});
     
-    #ifndef __EMSCRIPTEN__s
+    #ifndef __EMSCRIPTEN__
         SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
         while (!WindowShouldClose())    // Detect window close button or ESC key
         {
@@ -47,6 +50,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     FreeEntityData(&entityData);
+    FreeLevelData(&levelData);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 

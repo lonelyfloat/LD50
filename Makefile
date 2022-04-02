@@ -1,4 +1,4 @@
-SOURCE_FILES ?= src/animations.c src/main.c
+SOURCE_FILES ?= src/level.c src/animations.c src/main.c
 PROJECT_NAME ?= game
 
 CFLAGS ?= -Os -std=c99 -Wall -Isrc/include -Lsrc/lib/
