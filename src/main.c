@@ -10,7 +10,7 @@ enum GameScreen
 {
     GAME_MENU,
     GAME_PLAYING
-} currentScreen;
+} currentScreen = GAME_PLAYING;
 
 const int screenWidth = 800;
 const int screenHeight = 450;
@@ -24,13 +24,14 @@ int main(void)
     //--------------------------------------------------------------------------------------
     
     InitWindow(screenWidth, screenHeight, "LD50 Game");
-    InitEntityData(&entityData, 50, 2, (size_t[]){sizeof(Vector2), sizeof(AnimatedTexture)});
-    for (int i = 0; i < 50; ++i)
+    InitEntityData(&entityData, 1, 2, (size_t[]){sizeof(Vector2), sizeof(AnimatedTexture)});
+    for (int i = 0; i < 1; ++i)
     {
         AddComponent(&entityData, i, 0, ((Vector2){screenWidth/2, screenHeight/2}), Vector2);
+        AddComponent(&entityData, i, 1, ((AnimatedTexture){LoadTexture("assets/player/idle.png"), ((Vector2){600,600}), 0, 24}), AnimatedTexture);
     }
     
-    #ifndef __EMSCRIPTEN__
+    #ifndef __EMSCRIPTEN__s
         SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
         while (!WindowShouldClose())    // Detect window close button or ESC key
         {
@@ -85,7 +86,14 @@ void UpdateDrawFrame(void)
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-
+            for (int i = 0; i < entityData.componentData[1].count; ++i)
+            {
+                if(HasComponent(&entityData, 0, entityData.componentData[1].dense[i]))
+                {
+                    DrawAnimatedTexture(&entityData, i);
+                }
+            }
+            
         EndDrawing();
         //----------------------------------------------------------------------------------
         break;

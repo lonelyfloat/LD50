@@ -2,6 +2,7 @@
 #define H_ANIMATIONS
 
 #include <raylib.h>
+#include <ssecs.h>
 
 typedef struct AnimatedTexture
 {
@@ -11,6 +12,6 @@ typedef struct AnimatedTexture
     int fps;
 } AnimatedTexture;
 
-void DrawAnimatedTexture();
+void DrawAnimatedTexture(EntityData* data, EntityID id);
 
 #endif

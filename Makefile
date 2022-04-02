@@ -1,4 +1,4 @@
-SOURCE_FILES ?= src/main.c
+SOURCE_FILES ?= src/animations.c src/main.c
 PROJECT_NAME ?= game
 
 CFLAGS ?= -Os -std=c99 -Wall -Isrc/include -Lsrc/lib/
@@ -10,7 +10,7 @@ OUTPUT ?= $(PROJECT_NAME).exe
 
 
 debug:
-	gcc $(SOURCE_FILES) -o builds/$(PROJECT_NAME).exe $(CFLAGS)$(PCFLAGS) $(LDFLAGS) -lopengl32 -lgdi32 -lwinmm
+	gcc $(SOURCE_FILES) -o $(PROJECT_NAME).exe $(CFLAGS)$(PCFLAGS) $(LDFLAGS) -lopengl32 -lgdi32 -lwinmm
 
 release(windows):
 	gcc -static -mwindows $(SOURCE_FILES) -o  builds/$(PROJECT_NAME).exe $(CFLAGS)$(PCFLAGS) $(LDFLAGS) -lopengl32 -lgdi32 -lwinmm
