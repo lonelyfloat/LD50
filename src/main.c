@@ -1,4 +1,6 @@
 #include <raylib.h>
+#include <ssecs.h>
+#include "animations.h"
 
 #ifdef __EMSCRIPTEN__
     #include <emscripten/emscripten.h>
@@ -13,7 +15,7 @@ enum GameScreen
 const int screenWidth = 800;
 const int screenHeight = 450;
 
-
+EntityData entityData;
 void UpdateDrawFrame(void);
 
 int main(void)
@@ -22,6 +24,12 @@ int main(void)
     //--------------------------------------------------------------------------------------
     
     InitWindow(screenWidth, screenHeight, "LD50 Game");
+    InitEntityData(&entityData, 50, 2, (size_t[]){sizeof(Vector2), sizeof(AnimatedTexture)});
+    for (int i = 0; i < 50; ++i)
+    {
+        AddComponent(&entityData, i, 0, ((Vector2){screenWidth/2, screenHeight/2}), Vector2);
+    }
+    
     #ifndef __EMSCRIPTEN__
         SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
         while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -37,6 +45,7 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    FreeEntityData(&entityData);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
