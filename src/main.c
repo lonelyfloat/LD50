@@ -16,23 +16,37 @@ enum GameScreen
 const int screenWidth = 800;
 const int screenHeight = 450;
 
+// Global Data
 EntityData entityData;
-LevelData levelData= (LevelData){};
-void UpdateDrawFrame(void);
+LevelData levelData = (LevelData){};
+
+// Player Data
+
 Texture2D *playerAnims;
+
+// Enemy Data
+
+Texture2D *laundryAnims;
+Texture2D *dishAnims;
+
+
+void UpdateDrawFrame(void);
+
+
+
 int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
     
     InitWindow(screenWidth, screenHeight, "LD50 Game");
-    InitEntityData(&entityData, 1, 2, (size_t[]){sizeof(Vector2), sizeof(AnimatedTexture)});
+    InitEntityData(&entityData, 1, 3, (size_t[]){sizeof(Rectangle), sizeof(Vector2), sizeof(AnimatedTexture)});
     playerAnims = malloc(2 * sizeof(Texture2D));
     playerAnims = (Texture2D []){LoadTexture("assets/player/idle.png"), LoadTexture("assets/player/walk.png")};
     for (int i = 0; i < 1; ++i)
     {
         AddComponent(&entityData, i, 0, ((Vector2){screenWidth/2, screenHeight/2}), Vector2);
-        AddComponent(&entityData, i, 1, ((AnimatedTexture){0, playerAnims, ((Vector2){600,600}), 0, 24, 0.3, false}), AnimatedTexture);
+        AddComponent(&entityData, i, 2, ((AnimatedTexture){0, playerAnims, ((Vector2){600,600}), 0, 24, 0.3, false}), AnimatedTexture);
     }
     levelData = LoadLevelData("assets/leveldata", (char* []){"assets/bedroomtiles.png", "assets/kitchentiles.png", "assets/helltiles.png"});
     
@@ -85,22 +99,23 @@ void UpdateDrawFrame(void)
         // Main game loop
         // Update
         //----------------------------------------------------------------------------------
+        // player animation stuff, get camera working at some point
         if(IsKeyPressed(KEY_LEFT))
         {
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).flipped = true;
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentFrame = 0;
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentAnim = 1; 
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).flipped = true;
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentFrame = 0;
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentAnim = 1; 
         }
         else if(IsKeyPressed(KEY_RIGHT))
         {
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).flipped = false;
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentFrame = 0;
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentAnim = 1;
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).flipped = false;
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentFrame = 0;
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentAnim = 1;
         }
         else if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT))
         {
-            if(GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentFrame > 7) GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentFrame = 0;
-            GetComponentFromID(&entityData, 0, 1, AnimatedTexture).currentAnim = 0;
+            if(GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentFrame > 7) GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentFrame = 0;
+            GetComponentFromID(&entityData, 0, 2, AnimatedTexture).currentAnim = 0;
    
         }
 
@@ -112,9 +127,9 @@ void UpdateDrawFrame(void)
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-            for (int i = 0; i < entityData.componentData[1].count; ++i)
+            for (int i = 0; i < entityData.componentData[2].count; ++i)
             {
-                if(HasComponent(&entityData, 0, entityData.componentData[1].dense[i]))
+                if(HasComponent(&entityData, 0, entityData.componentData[2].dense[i]))
                 {
                     DrawAnimatedTexture(&entityData, i);
                 }

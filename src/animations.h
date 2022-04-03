@@ -13,6 +13,7 @@ typedef struct AnimatedTexture
     int fps;
     float scale;
     bool flipped;
+    Vector2 offsets;
 } AnimatedTexture;
 
 void DrawAnimatedTexture(EntityData* data, EntityID id);
