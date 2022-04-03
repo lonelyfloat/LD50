@@ -6,10 +6,13 @@
 
 typedef struct AnimatedTexture
 {
-    Texture2D texture;
+    int currentAnim;
+    Texture2D *textures;
     Vector2 size;
     int currentFrame;
     int fps;
+    float scale;
+    bool flipped;
 } AnimatedTexture;
 
 void DrawAnimatedTexture(EntityData* data, EntityID id);
